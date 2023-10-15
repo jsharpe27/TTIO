@@ -2,6 +2,9 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import LogoutButton from '../components/LogoutButton'
+import MyPosts from '../components/MyPosts'
+import AddPost from '@/components/AddPost'
+
 
 export default async function Index() {
   const supabase = createServerComponentClient({ cookies })
@@ -31,6 +34,17 @@ export default async function Index() {
         </div>
         <h1 className='text-white'>TTIOT - the truth is out there</h1>
       </nav>
+
+      {user ? (
+          <MyPosts />
+      ) : (
+        <></>
+      )}
+
+      {user ? (
+        <AddPost />)
+       : (<></>)
+      }
 
     </div>
   )
