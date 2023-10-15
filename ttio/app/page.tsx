@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import Link from 'next/link'
 import LogoutButton from '../components/LogoutButton'
 import MyPosts from '../components/MyPosts'
-import AddPost from '@/components/AddPost'
+
 
 
 export default async function Index() {
@@ -36,16 +36,14 @@ export default async function Index() {
       </nav>
 
       {user ? (
-          <MyPosts />
+          <div className='text-white'>
+            <MyPosts />
+          </div>
       ) : (
         <></>
       )}
 
-      {user ? (
-        <AddPost />)
-       : (<></>)
-      }
-
+  
     </div>
   )
 }
