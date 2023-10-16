@@ -2,6 +2,10 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import LogoutButton from '../components/LogoutButton'
+import MyPosts from '../components/MyPosts'
+import ProfileForm from '@/components/profileform'
+
+
 
 export default async function Index() {
   const supabase = createServerComponentClient({ cookies })
@@ -22,16 +26,26 @@ export default async function Index() {
             </div>
           ) : (
             <Link
-              href="/login"
-              className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
+            href="/login"
+            className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
             >
               Login
             </Link>
           )}
         </div>
-        <h1 className='text-white'>TTIOT - the truth is out there</h1>
+        <h1 className='text-black'>TTIOT - the truth is out there</h1>
       </nav>
 
+      {user ? (
+        <div className='text-black'>
+            <MyPosts />
+            <ProfileForm/>
+          </div>
+      ) : (
+        <></>
+      )}
+
+  
     </div>
   )
 }
