@@ -18,7 +18,7 @@ export default function MyPosts() {
           const result = await response.json();
           
       
-          console.log(result);
+          console.log(result, 'we are here');
 
 
           setMessage(result.message);
