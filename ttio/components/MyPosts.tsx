@@ -24,9 +24,11 @@ export default function MyPosts() {
           setMessage(result.message);
         } else {
           setMessage('Error sending data to the API');
+          console.log(message)
         } 
       } catch (error) {
         setMessage('An error occurred while sending the request');
+        console.log(message)
       }
     }
     fetchData();
@@ -34,9 +36,9 @@ export default function MyPosts() {
 
 
   return (
-    <div className="bg-white text-black flex flex-col">
-      <p>placeholder</p>>
-  
+    <div className="bg-white text-black mb-20">
+      <p>placeholder</p>
+      
     </div>
   );
 }

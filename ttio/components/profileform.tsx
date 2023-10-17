@@ -32,7 +32,7 @@ export default function ProfileForm() {
 
   return (
     <div className="min-h-1/2 flex items-center 
-    p-5 justify-center border-black border">
+    p-5 justify-center border-black border mt-11">
       <div className="max-w-md">
         <h1 className="text-2xl font-semibold mb-4">Submit Username</h1>
         <form onSubmit={handleSubmit}>
