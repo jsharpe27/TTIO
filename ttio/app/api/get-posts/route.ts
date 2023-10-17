@@ -15,8 +15,10 @@ export async function GET(request: Request){
         const { data, error } = await supabase
             .from("posts")
             .select('title')
-            .eq("id", user?.id);
-    
+            .eq("user_id", user?.id);
+        
+        console.log(data, 'API FETCHING DATA');
+        
     let responseJSON = {};
         if (!error) {
             responseJSON = { message: "Posts retrieved successfully", data };
