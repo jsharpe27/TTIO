@@ -41,6 +41,7 @@ export default async function Index() {
       {user ? (
         <div className='text-black flex flex-col items-center'>
             <MyPosts />
+            
             <ProfileForm/>
           </div>
       ) : (
