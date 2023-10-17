@@ -8,7 +8,7 @@ export default function MyPosts() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('/api/posts', {
+        const response = await fetch('/api/posts/all', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
