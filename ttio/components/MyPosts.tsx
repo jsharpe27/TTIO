@@ -1,4 +1,5 @@
 "use client"
+
 import { useState, useEffect } from 'react';
 
 export default function MyPosts() {
@@ -41,7 +42,7 @@ export default function MyPosts() {
   async function handleNewPost(e: any) {
     e.preventDefault();
     try {
-      const response = await fetch('api/posts', {
+      const response = await fetch('api/get-posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +58,6 @@ export default function MyPosts() {
       } catch (error) {
         setMessage('An error occurred while sending the request');
       }
-
   }
 
 
@@ -69,26 +69,28 @@ export default function MyPosts() {
         {posts}
       </div>
 
-
-      <form className='flex flex-col'
-      onSubmit={handleNewPost}
-      >
-        <h2>Add a new post</h2>
-        <input 
-        type="text" 
-        placeholder="title" 
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        />
-        <textarea 
-        placeholder="body" 
-        value={body}
-        onChange={(e) => setBody(e.target.value)}
-        />
-        <button>Add Post</button>
-      </form>
-
-    
+      
+      <div className='flex flex-col bg-gray-400 p-5'>
+      <h2>Add a new post</h2>
+        <form className='flex flex-col gap-5'
+          onSubmit={handleNewPost}
+        >
+            <input 
+            type="text" 
+            placeholder="title" 
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            
+            />
+            <textarea 
+            placeholder="body" 
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+         
+            />
+            <button className='bg-blue-600'>Add Post</button>
+        </form>
+        </div>
     </div>
   );
 }
