@@ -8,7 +8,7 @@ export default function MyPosts() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('/api/get-posts', {
+        const response = await fetch('/api/posts', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -16,15 +16,14 @@ export default function MyPosts() {
         });
         if (response.ok) {
           const result = await response.json();
-          
-      
+          if(result.success == true) {
+            setPosts(result.data)
+          }
           console.log(result, 'we are here');
 
 
-          setMessage(result.message);
         } else {
           setMessage('Error sending data to the API');
-          console.log(message)
         } 
       } catch (error) {
         setMessage('An error occurred while sending the request');
@@ -37,7 +36,9 @@ export default function MyPosts() {
 
   return (
     <div className="bg-white text-black mb-20">
-      <p>placeholder</p>
+       {posts.map((post: any) => (
+          <li key={post.id}>{post.title}</li>
+        ))}
       
     </div>
   );
