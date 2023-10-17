@@ -1,27 +1,40 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+"use client"
+import { useState, useEffect } from 'react';
 
-export default async function MyPosts() {
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+export default function MyPosts() {
+  const [message, setMessage] = useState('');
+  const [posts, setPosts] = useState([]);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('/api/get-posts', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          const result = await response.json();
+          setPosts(result.posts);
+          console.log(result.posts);
 
-  const { data: posts } = await supabase
-    .from("posts")
-    .select("id,title, user_id")
-    .eq("user_id", user?.id);
+
+          setMessage(result.message);
+        } else {
+          setMessage('Error sending data to the API');
+        } 
+      } catch (error) {
+        setMessage('An error occurred while sending the request');
+      }
+    }
+    fetchData();
+  }, []); 
+
 
   return (
     <div className="bg-white text-black flex flex-col">
-      <h1>My Posts:</h1>
-      {posts?.map((post) => (
-        <ul key={post.id}>
-          <li>{post.title}</li>
-        </ul>
-      ))}
+      {posts}
     </div>
   );
 }
