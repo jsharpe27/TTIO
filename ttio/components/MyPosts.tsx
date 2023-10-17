@@ -16,8 +16,9 @@ export default function MyPosts() {
         });
         if (response.ok) {
           const result = await response.json();
-          setPosts(result.posts);
-          console.log(result.posts);
+          
+      
+          console.log(result);
 
 
           setMessage(result.message);
@@ -34,7 +35,8 @@ export default function MyPosts() {
 
   return (
     <div className="bg-white text-black flex flex-col">
-      {posts}
+      <p>placeholder</p>>
+  
     </div>
   );
 }

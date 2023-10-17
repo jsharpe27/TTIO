@@ -14,7 +14,8 @@ export async function GET(request: Request){
     if (user){
         const { data, error } = await supabase
             .from("posts")
-            .select("*")
+            .select('title')
+            .eq("id", user?.id);
     
     let responseJSON = {};
         if (!error) {
