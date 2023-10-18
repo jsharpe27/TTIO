@@ -64,7 +64,7 @@ export default function MyPosts() {
 
   return (
     <div>
-      <div className="bg-white text-black mb-20 mt-[2rem]">
+      <div className="bg-white text-black mb-20 mt-[4rem]">
         <h1>My Posts</h1>
         {posts}
       </div>
