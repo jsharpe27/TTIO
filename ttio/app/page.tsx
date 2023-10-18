@@ -41,7 +41,7 @@ export default async function Index() {
       </nav>
 
       {user ? (
-        <div className='text-black flex flex-col items-center '>
+        <div className='text-black flex flex-col '>
             <MyPosts />
             <UserSideBar />
             <ProfileForm/>
