@@ -4,6 +4,8 @@ import Link from 'next/link'
 import LogoutButton from '../components/LogoutButton'
 import MyPosts from '../components/MyPosts'
 import ProfileForm from '@/components/profileform'
+import { User } from 'lucide-react'
+import UserSideBar from '@/components/UserSideBar'
 
 
 
@@ -17,7 +19,7 @@ export default async function Index() {
   console.log(user, 'INDEX');
   
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center relative">
       <nav className="w-full flex justify-center items-center border-b border-b-foreground/10 h-16">
         <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm text-foreground">
           
@@ -39,9 +41,9 @@ export default async function Index() {
       </nav>
 
       {user ? (
-        <div className='text-black flex flex-col items-center'>
+        <div className='text-black flex flex-col items-center '>
             <MyPosts />
-            
+            <UserSideBar />
             <ProfileForm/>
           </div>
       ) : (
