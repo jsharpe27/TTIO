@@ -6,9 +6,10 @@ const font = Montserrat({ weight: "600", subsets: ["latin"] });
 
 export default function UserSideBar() {
   return (
-    <div className='absolute right-0 sm:flex sm:items-center 
-    sm:flex-col flex sm:w-fit sm:py-2 sm:px-5 gap-5 p-2
-    sm:rounded-md shadow-md font-Montserrat hover:text-bold w-screen justify-center
+    <div className='absolute right-4 sm:flex sm:items-center top-4
+    sm:flex-col flex sm:w-fit sm:py-2 sm:px-5 gap-5 p-2 dark:text-black dark:border
+     dark:border-white border border-black rounded-md shadow-black border-3
+     font-Montserrat hover:text-bold w-screen justify-center
     '>
             <a href='https://www.reddit.com/r/UFOs' target="_blank" 
             className={cn('hover:scale-110 transition-all bg-green-300 py-1 px-3 rounded-md' , font.className)}>
