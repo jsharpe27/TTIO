@@ -8,12 +8,16 @@ import { Montserrat, Saira_Stencil_One } from 'next/font/google';
 import { ModeToggle } from "./ModeToggle";
 import MobileMenuBar from "./MobileMenuBar";
 import { useLoginModal } from "@/hooks/LoginModal";
+import { User } from "@supabase/supabase-js";
 
 const font = Montserrat({ weight: "600", subsets: ["latin"] });
 const font2 = Saira_Stencil_One({ weight: "400", subsets: ["latin"] });
 
+interface HeaderProps {
+    user: User | null
+}
 
-const Header = () => {
+const Header = ({user}: HeaderProps) => {
   const loginState = useLoginModal();
 
   return (
@@ -55,28 +59,28 @@ const Header = () => {
         >
 
             <Button
-                size={'lg'}
                 variant={'post'}
-                className="rounded-3xl"
+                size={'lg'} 
+                className="rounded-3xl "
             >
                 Post
             </Button>
 
-            <Button
-                size={'lg'}
+            {!user && <Button
                 variant={'outline'}
                 className="text-lg text-black rounded-3xl bg-white"
                 onClick={loginState.open}
             >
                 Login/Signup
             </Button>
+            }
 
             <ModeToggle />
         </div>
 
         <div className="flex items-center gap-x-4 md:hidden">
             <ModeToggle />
-            <MobileMenuBar />
+            <MobileMenuBar user = {user} />
         </div>
     </nav>
   )

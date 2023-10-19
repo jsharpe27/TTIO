@@ -10,6 +10,12 @@ import { Button } from "./ui/button";
 import { CircleLoader } from "react-spinners";
 import Image from "next/image";
 import { useState } from "react";
+import axios from "axios";
+import { useToast } from "./ui/use-toast";
+import { useRouter } from "next/navigation";
+import { useLoginModal } from "@/hooks/LoginModal";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useSignUpState } from "@/hooks/SignUpState";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -22,14 +28,75 @@ const formSchema = z.object({
 
 const AuthForm = () => {
   const [logginIn, setlogginIn] = useState(true);
+  const loginState = useLoginModal();
+  const signupState = useSignUpState();
+  const supabase = createClientComponentClient();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
+
+  const {toast} = useToast();
+  const router = useRouter();
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (values: any) => {
-    console.log('SUBMITTING', values);
+  const onSubmit = async (values: 
+    z.infer<typeof formSchema>
+    ) => {
+    try {
+
+      if(logginIn){
+        var {error} = await supabase.auth.signInWithPassword({
+          email: values.email,
+          password: values.password,
+        });
+      }
+      else{
+        var {error} = await supabase.auth.signUp({
+          email: values.email,
+          password: values.password,
+        }
+        );
+      }
+
+      if(error){
+        throw error;
+      }
+
+      toast({
+        description: 'Success',
+        duration: 2000,
+      })
+
+      console.log('[SUCCESS SUBMITTING LOGIN/SIGNUP]', error);
+      
+      
+      loginState.close();
+      router.refresh();
+
+      if(logginIn){
+        router.push('/')
+      }
+      else{
+        useSignUpState.setState({email: values.email});
+        router.push('/verify-email')
+      }
+      
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: `something went wrong, please try again later.`,
+        duration: 5000,
+      });
+
+      console.log('[ERROR SUBMITTING LOGIN/SIGNUP]', error);
+      
+    }
   };
 
 
@@ -44,6 +111,7 @@ const AuthForm = () => {
         >
           <Button
             className="flex items-center gap-x-2"
+            variant={'outline'}
           >
             {logginIn ? 'Login with Google+': 'Sign Up with Google+'}
             <div
@@ -105,6 +173,7 @@ const AuthForm = () => {
           size={'lg'}
           className="font-bold text-lg rounded-3xl"
           disabled={isLoading}
+          variant={'outline'}
         >
           {isLoading ? <CircleLoader size={16} /> : logginIn ? 'Login': 'Sign Up'}
         </Button>
