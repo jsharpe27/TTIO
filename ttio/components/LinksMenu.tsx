@@ -25,12 +25,12 @@ export default function LinksMenu() {
      
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="text-xl" >
+          <Button className="text-xl" variant='outline' >
             Links
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>
+          <DropdownMenuItem >
           <a href='https://www.reddit.com/r/UFOs' target="_blank" 
               className={cn('hover:scale-110 ',font.className)}>
               UFOs subreddit</a>
