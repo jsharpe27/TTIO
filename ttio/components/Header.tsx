@@ -31,7 +31,7 @@ const Header = ({user}: HeaderProps) => {
                 <Image
                     src={'/logo.png'}
                     alt="logo"
-                    layout='fill'
+                    layout='fill'   
                     objectFit='contain'
                     className="w-full h-full object-cover"
                 />

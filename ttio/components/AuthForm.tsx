@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useLoginModal } from "@/hooks/LoginModal";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSignUpState } from "@/hooks/SignUpState";
+import { useTheme } from "next-themes";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -31,6 +32,7 @@ const AuthForm = () => {
   const loginState = useLoginModal();
   const signupState = useSignUpState();
   const supabase = createClientComponentClient();
+  const {theme} = useTheme();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -175,7 +177,7 @@ const AuthForm = () => {
           disabled={isLoading}
           variant={'outline'}
         >
-          {isLoading ? <CircleLoader size={16} /> : logginIn ? 'Login': 'Sign Up'}
+          {isLoading ? <CircleLoader size={16} color={theme === "light" ? "black" : "white"} /> : logginIn ? 'Login': 'Sign Up'}
         </Button>
 
         <span onClick={() => setlogginIn(!logginIn)}
