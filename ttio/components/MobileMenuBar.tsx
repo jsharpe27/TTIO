@@ -1,8 +1,13 @@
+'use client'
+
 import { Menu } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { Button } from "./ui/button";
+import { useLoginModal } from "@/hooks/LoginModal";
 
 const MobileMenuBar = () => {
+    const loginState = useLoginModal();
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild className="md:hidden">
@@ -29,6 +34,7 @@ const MobileMenuBar = () => {
                         size={'lg'}
                         variant={'outline'}
                         className="text-lg text-black rounded-3xl bg-white"
+                        onClick={loginState.open}
                     >
                         Login/Signup
                     </Button>

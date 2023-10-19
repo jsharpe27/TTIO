@@ -1,3 +1,4 @@
+'use client'
 
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -6,12 +7,15 @@ import { cn } from "@/lib/utils";
 import { Montserrat, Saira_Stencil_One } from 'next/font/google';
 import { ModeToggle } from "./ModeToggle";
 import MobileMenuBar from "./MobileMenuBar";
+import { useLoginModal } from "@/hooks/LoginModal";
 
 const font = Montserrat({ weight: "600", subsets: ["latin"] });
 const font2 = Saira_Stencil_One({ weight: "400", subsets: ["latin"] });
 
 
 const Header = () => {
+  const loginState = useLoginModal();
+
   return (
     <nav className="w-full flex items-center justify-between max-w-5xl mx-auto mt-4 px-8 md:px-2">
         <div
@@ -62,6 +66,7 @@ const Header = () => {
                 size={'lg'}
                 variant={'outline'}
                 className="text-lg text-black rounded-3xl bg-white"
+                onClick={loginState.open}
             >
                 Login/Signup
             </Button>

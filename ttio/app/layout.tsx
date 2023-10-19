@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@/components/theme-provider'
-
 import './globals.css'
+import LoginModal from '@/components/LoginModal'
 
 export const metadata = {
   title: 'Create Next App',
@@ -21,6 +21,7 @@ export default function RootLayout({
           enableSystem={true}
           disableTransitionOnChange
         >
+          <LoginModal />
           <main className="min-h-screen bg-background flex flex-col items-center">
             {children}
           </main>
