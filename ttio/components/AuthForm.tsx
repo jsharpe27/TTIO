@@ -89,10 +89,22 @@ const AuthForm = () => {
         router.push('/verify-email')
       }
       
-    } catch (error) {
+    } catch (error: any) {
+      let description = "";
+      switch (error.toString()) {
+        case "AuthApiError: Invalid login credentials":
+          description = "Invalid login credentials!"
+          break;
+        case "AuthApiError: Email not confirmed":
+          description = "Email not confirmed"
+          break;
+        default:
+          description = `something went wrong, please try again later.`
+          break;
+      }
       toast({
         variant: "destructive",
-        description: `something went wrong, please try again later.`,
+        description: description,
         duration: 5000,
       });
 
