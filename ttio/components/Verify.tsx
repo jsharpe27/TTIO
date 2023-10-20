@@ -4,10 +4,32 @@ import { useSignUpState } from "@/hooks/SignUpState"
 import { Button } from "./ui/button"
 
 const Verify = () => {
-  const signupState = useSignUpState();
+    const signupState = useSignUpState();
 
-  return (
-    <div
+    const openEmailProvider = (email: string) => {
+        const domain = email.split('@')[1];
+
+        const emailProviders: {
+            [key: string]: string;
+        } = {
+            'gmail.com': 'https://mail.google.com/mail/u/0/#inbox',
+            'outlook.com': 'https://outlook.live.com/owa/',
+            'yahoo.com': 'https://mail.yahoo.com',
+            'hotmail.com': 'https://outlook.live.com/owa/',
+            'msn.com': 'https://outlook.live.com/owa/',
+        };
+
+        const defaultProvider = 'https://mail.google.com/mail/u/0/#inbox'; // default to gmail
+
+        if (emailProviders[domain]) {
+            window.open(emailProviders[domain]);
+        } else {
+            window.open(defaultProvider);
+        }
+    }
+
+    return (
+        <div
             className="flex flex-col w-full items-center justify-center gap-y-4 h-screen"
         >
             <h1
@@ -31,14 +53,14 @@ const Verify = () => {
                 size={'lg'}
                 onClick={
                     () => {
-                        window.open('https://mail.google.com/mail/u/0/#inbox')
+                        openEmailProvider(signupState.email);
                     }
                 }
             >
                 Open Mail
             </Button>
         </div>
-  )
+    )
 }
 
 export default Verify

@@ -1,77 +1,102 @@
+import db from "@/lib/db";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
-
-const getProfile = async (id: any) => {
-  const supabase = createRouteHandlerClient({ cookies });
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", id)
-
-  return { profile: data ? data[0] : null, err: error };
-}
+const supabase = createRouteHandlerClient({ cookies });
 
 export async function GET(request: Request) {
-  const supabase = createRouteHandlerClient({ cookies });
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const requestUrl = new URL(request.url)
-  if (!user) return NextResponse.redirect(`${requestUrl.origin}/login?error=Please login Again!`)
 
-  const result = await getProfile(user.id)
-  if (result.err) {
-    return NextResponse.json({
-      success: false,
-      error: result.err
-    });
-  } else {
-    return NextResponse.json({
-      success: true,
-      profile: result.profile
+  if (!user) return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}?error=Please login Again!`)
+
+  const {id} = await request.json()
+
+  try {
+    const profile = await db.profile.findUnique({
+      where:{
+        userId: id
+      }
     })
+
+    return new NextResponse(JSON.stringify({
+      success: true,
+      profile
+    }));
+
+  } catch (error) {
+    console.log('THERE WAS AN ERROR GETTING THE PROFILE', error);
+    return new NextResponse(JSON.stringify({
+      success: false,
+      error
+    }));
+  
   }
 }
 export async function PUT(request: Request) {
-  const supabase = createRouteHandlerClient({ cookies });
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const requestUrl = new URL(request.url)
-  if (!user) return NextResponse.redirect(`${requestUrl.origin}/login?error=Please login Again!`)
+
+  if (!user) return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}?error=Please login Again!`)
 
   const body = await request.json();
 
-  const result = await getProfile(user.id)
-  if (result.err) return NextResponse.json({
-    success: false,
-    error: result.err
-  });
+  try {
 
-  const { data, error } = await supabase
-    .from("profiles")
-    .update({
-      username: body.username ? body.username : result.profile.username,
-      full_name: body.full_name ? body.full_nameusername : result.profile.full_name,
-      avatar_url: body.avatar_url ? body.avatar_url : result.profile.avatar_url,
-      website: body.website ? body.website : result.profile.website,
-    })
-    .eq("id", user.id);
-
-  if (error) {
-    return NextResponse.json({
-      success: false,
-      error
+    const response = await db.profile.update({
+      where: {
+        userId: body.userId,
+      },
+      data: {
+        email: body.email,
+        name: body.name,
+        username: body.username,
+        bio: body.bio,
+        website: body.website,
+        avatar: body.avatar,
+      },
     });
-  } else {
+
     return NextResponse.json({
       success: true,
-      data
+      data: response,
+    });
+    
+  } catch (error) {
+    console.log('THERE WAS AN ERROR UPDATING THE PROFILE', error);
+    return NextResponse.json({
+      success: false,
+      error: error,
     });
   }
-
 }
 
+export async function POST(request: Request) {
+  const body = await request.json();
+
+  try {
+    const response = await db.profile.create({
+      data: {
+        userId: body.userId,
+        email: body.email,
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: response,
+    });
+
+  } catch (error) {
+    console.log('THERE WAS AN ERROR CREATING THE PROFILE', error);
+    
+    return NextResponse.json({
+      success: false,
+      error: error,
+    });
+  }
+}

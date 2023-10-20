@@ -10,13 +10,13 @@ import { Button } from "./ui/button";
 import { CircleLoader } from "react-spinners";
 import Image from "next/image";
 import { useState } from "react";
-import axios from "axios";
 import { useToast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useLoginModal } from "@/hooks/LoginModal";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSignUpState } from "@/hooks/SignUpState";
 import { useTheme } from "next-themes";
+import axios from "axios";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -59,11 +59,21 @@ const AuthForm = () => {
         });
       }
       else{
-        var {error} = await supabase.auth.signUp({
+        var {data, error} = await supabase.auth.signUp({
           email: values.email,
           password: values.password,
+          options:{
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}`,
+          }
         }
         );
+
+        console.log('[SIGNUP DATA]', data);
+        await axios.post('/api/profile', {
+          email: values.email,
+          userId: data?.user?.id,
+        });
+        
       }
 
       if(error){
@@ -76,7 +86,6 @@ const AuthForm = () => {
       })
 
       console.log('[SUCCESS SUBMITTING LOGIN/SIGNUP]', error);
-      
       
       loginState.close();
       router.refresh();
