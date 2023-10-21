@@ -41,5 +41,10 @@
     "@types/react-dom": "18.2.5",
     "encoding": "^0.1.13",
     "prisma": "^5.4.2"
+  },
+  "overrides": {
+    "@supabase/supabase-js": {
+      "@supabase/gotrue-js": "2.43.1"
+    }
   }
 }

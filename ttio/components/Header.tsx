@@ -18,10 +18,12 @@ interface HeaderProps {
 }
 
 const Header = ({user}: HeaderProps) => {
+    
   const loginState = useLoginModal();
+  
 
   return (
-    <nav className="w-full flex items-center justify-between max-w-5xl mx-auto mt-4 px-8 md:px-2">
+    <nav className="w-full flex items-center justify-between max-w-5xl mx-auto mt-4 px-4 md:px-2">
         <div
             className="flex items-center gap-x-2"
         >

@@ -12,6 +12,11 @@ const RootLayout = async ({
   const supabase = createServerComponentClient({ cookies });
   const {user} = (await supabase.auth.getUser()).data
 
+  const session = await supabase.auth.getSession();
+
+  console.log('[USER]', user);
+  console.log('[SESSION]', session);
+
   return ( 
     <div className="h-full w-full">
       <Header
