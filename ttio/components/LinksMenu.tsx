@@ -25,24 +25,24 @@ export default function LinksMenu() {
      
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="text-xl" variant='outline' >
+          <Button className="text-lg" variant='outline' >
             Links
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent align="end" className={cn(font.className)}>
           <DropdownMenuItem >
           <a href='https://www.reddit.com/r/UFOs' target="_blank" 
-              className={cn('hover:scale-110 ',font.className)}>
+              className='hover:scale-110 '>
               UFOs subreddit</a>
           </DropdownMenuItem>
           <DropdownMenuItem>
           <a href='https://www.mufon.com/' target="_blank"
-              className={cn(font.className)}>
+              className='hover:scale-110 '>
               Mutual UFO Network</a>
           </DropdownMenuItem>
           <DropdownMenuItem>
           <a href='https://www.theblackvault.com/' target="_blank"
-              className={cn(font.className)}>
+              className='hover:scale-110 '>
               The Black Vault</a>
           </DropdownMenuItem>
 
@@ -53,15 +53,3 @@ export default function LinksMenu() {
     </>
   )
 }
-
-/*   
-<a href='https://www.reddit.com/r/UFOs' target="_blank" 
-              className={cn('hover:scale-110 transition-all bg-green-300 py-1 px-3 rounded-md' , font.className)}>
-              UFOs subreddit</a>
-              <a href='https://www.mufon.com/' target="_blank"
-              className={cn('hover:scale-110 transition-all bg-green-300 p-1 rounded-md' , font.className)}>
-              Mutual UFO Network</a>
-              <a href='https://www.theblackvault.com/' target="_blank"
-              className={cn('hover:scale-110 transition-all bg-green-300 p-1 rounded-md' , font.className)}>
-              The Black Vault</a>
-*/
