@@ -4,6 +4,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils";
 
+import LinksMenu from "./LinksMenu";
 import { Montserrat, Saira_Stencil_One } from 'next/font/google';
 import { ModeToggle } from "./ModeToggle";
 import MobileMenuBar from "./MobileMenuBar";
@@ -75,6 +76,8 @@ const Header =  ({ user }: HeaderProps) => {
                 >
                     Post
                 </Button>
+
+                <LinksMenu />
 
                 {!user && !anonToken && <Button
                     variant={'outline'}

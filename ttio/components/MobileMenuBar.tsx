@@ -6,14 +6,15 @@ import { Button } from "./ui/button";
 import { useLoginModal } from "@/hooks/LoginModal";
 import { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
+import LinksMenu from "./LinksMenu";
 
 interface MobileMenuBarProps {
     user: User | null;
 }
 
-const MobileMenuBar = ({user}: MobileMenuBarProps) => {
+const MobileMenuBar = ({ user }: MobileMenuBarProps) => {
     const loginState = useLoginModal();
-    const [anonToken, setAnonToken] = useState(''); 
+    const [anonToken, setAnonToken] = useState('');
 
     useEffect(() => {
         const anonToken = localStorage.getItem('anonToken');
@@ -31,7 +32,7 @@ const MobileMenuBar = ({user}: MobileMenuBarProps) => {
             >
                 <DropdownMenuItem
                     className="w-full flex justify-center"
-                >  
+                >
                     <Button
                         size={'lg'}
                         variant={'post'}
@@ -39,6 +40,15 @@ const MobileMenuBar = ({user}: MobileMenuBarProps) => {
                     >
                         Post
                     </Button>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem>
+
+                    <div
+                        className="w-full flex justify-center"
+                    >
+                        <LinksMenu />
+                    </div>
                 </DropdownMenuItem>
 
                 {!user && !anonToken && <DropdownMenuItem
