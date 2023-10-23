@@ -11,8 +11,8 @@ export default function ProfileForm() {
 
 
     try {
-      const response = await fetch('/api/update-profile', {
-        method: 'POST',
+      const response = await fetch('/api/profile', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -20,7 +20,22 @@ export default function ProfileForm() {
       });
       if (response.ok) {
         const result = await response.json();
-        setMessage(result.message);
+        if(result.success == false) {
+          if(result.error.code == '23514') {
+          } 
+          switch (result.error.code) {
+            case '23514':
+              setMessage('Username should have at least 3 lettres');
+              break;
+            case '23505':
+            setMessage('Username already used!');
+              break;
+            default:
+              setMessage('Error with this username');
+          }
+        } else {
+          setMessage("Profile updated successfully");
+        }
       } else {
         setMessage('Error sending data to the API');
       }

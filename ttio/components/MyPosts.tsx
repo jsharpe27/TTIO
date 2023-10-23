@@ -11,7 +11,7 @@ export default function MyPosts() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const response = await fetch('/api/get-posts', {
+        const response = await fetch('/api/posts/all', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -21,8 +21,7 @@ export default function MyPosts() {
         if (response.ok) {
           const result = await response.json();
           if(result.success == true) {
-            setPosts(result.data[0].title)
-            console.log(posts)
+            setPosts(result.data)
           }
           console.log(result, 'we are here');
           setPosts(result.data[0].title);
@@ -63,34 +62,11 @@ export default function MyPosts() {
 
 
   return (
-    <div>
-      <div className="bg-white text-black mb-20 mt-[4rem]">
-        <h1>My Posts</h1>
-        {posts}
-      </div>
-
+    <div className="bg-white text-black mb-20">
+       {posts.map((post: any) => (
+          <li key={post.id}>{post.title}</li>
+        ))}
       
-      <div className='flex flex-col bg-gray-400 p-5'>
-      <h2>Add a new post</h2>
-        <form className='flex flex-col gap-5'
-          onSubmit={handleNewPost}
-        >
-            <input 
-            type="text" 
-            placeholder="title" 
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            
-            />
-            <textarea 
-            placeholder="body" 
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-         
-            />
-            <button className='bg-blue-600'>Add Post</button>
-        </form>
-        </div>
     </div>
   );
 }
