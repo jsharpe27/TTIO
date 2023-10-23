@@ -29,8 +29,7 @@ const Header =  ({ user }: HeaderProps) => {
         const anonToken = localStorage.getItem('anonToken');
         setAnonToken(anonToken!);
     }, []);
-
-
+    
     return (
         <nav className="w-full flex items-center justify-between max-w-5xl mx-auto mt-4 px-4 md:px-2">
             <div
@@ -77,7 +76,7 @@ const Header =  ({ user }: HeaderProps) => {
                     Post
                 </Button>
 
-                <LinksMenu />
+                {(user || anonToken) && <LinksMenu />}
 
                 {!user && !anonToken && <Button
                     variant={'outline'}

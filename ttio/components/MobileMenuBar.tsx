@@ -42,14 +42,15 @@ const MobileMenuBar = ({ user }: MobileMenuBarProps) => {
                     </Button>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem>
-
-                    <div
-                        className="w-full flex justify-center"
-                    >
-                        <LinksMenu />
-                    </div>
-                </DropdownMenuItem>
+                {(user || anonToken) &&
+                    <DropdownMenuItem>
+                        <div
+                            className="w-full flex justify-center"
+                        >
+                            <LinksMenu />
+                        </div>
+                    </DropdownMenuItem>
+                }
 
                 {!user && !anonToken && <DropdownMenuItem
                     className="w-full flex justify-center"
