@@ -64,38 +64,45 @@ const Header =  ({ user }: HeaderProps) => {
                 </div>
             </div>
 
-            <div
-                className="items-center gap-x-4 transition-all duration-100 hidden md:flex"
+
+        <div
+            className="items-center gap-x-4 transition-all duration-100 hidden md:flex"
+        >
+
+            <Button
+                variant={'post'}
+                size={'lg'} 
+                className="rounded-3xl "
             >
+                Post
+            </Button>
 
+            {(user || anonToken) && <LinksMenu />}
+
+            {!user && !anonToken ? <Button
+                variant={'outline'}
+                className="text-lg text-black rounded-3xl bg-white"
+                onClick={loginState.open}
+            >
+                Login/Signup
+            </Button> : (
                 <Button
-                    variant={'post'}
-                    size={'lg'}
-                    className="rounded-3xl "
-                >
-                    Post
-                </Button>
+                variant={'outline'}
+                className="text-lg text-white rounded-3xl bg-black"
+            >
+                Logout
+            </Button>)
+            }
 
-                {(user || anonToken) && <LinksMenu />}
+            <ModeToggle />
+        </div>
 
-                {!user && !anonToken && <Button
-                    variant={'outline'}
-                    className="text-lg text-black rounded-3xl bg-white"
-                    onClick={loginState.open}
-                >
-                    Login/Signup
-                </Button>
-                }
-
-                <ModeToggle />
-            </div>
-
-            <div className="flex items-center gap-x-4 md:hidden">
-                <ModeToggle />
-                <MobileMenuBar user={user} />
-            </div>
-        </nav>
-    )
+        <div className="flex items-center gap-x-4 md:hidden">
+            <ModeToggle />
+            <MobileMenuBar user = {user} />
+        </div>
+    </nav>
+  )
 }
 
 export default Header
