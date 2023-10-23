@@ -11,14 +11,13 @@ import { CircleLoader } from "react-spinners";
 import Image from "next/image";
 import { useState, useRef } from "react";
 import { useToast } from "./ui/use-toast";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useLoginModal } from "@/hooks/LoginModal";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSignUpState } from "@/hooks/SignUpState";
 import { useTheme } from "next-themes";
 import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha"
-import { verifyCaptcha } from "@/lib/utils";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -32,7 +31,7 @@ const formSchema = z.object({
 const AuthForm = () => {
   const [logginIn, setlogginIn] = useState(true);
   const [googleLoading, setgoogleLoading] = useState(false); // [TODO] use this to show loading state for google auth
-  const [anonUserCheck, setAnonUserCheck] = useState(false); 
+  const [anonUserCheck, setAnonUserCheck] = useState(false);
   const loginState = useLoginModal();
   const signupState = useSignUpState();
   const supabase = createClientComponentClient();
@@ -50,18 +49,24 @@ const AuthForm = () => {
   const { toast } = useToast();
   const router = useRouter();
 
-  
-
   const isLoading = form.formState.isSubmitting;
 
   async function handleCaptchaSubmission(token: string | null) {
     setAnonUserCheck(true);
 
-    await verifyCaptcha(token)
-      .then(() => {
-        localStorage.setItem('anonToken', token!)
-        loginState.close();
-      })
+    await axios.post('/api/verify', {
+      captcha: token
+    },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).then(() => {
+      localStorage.setItem('anonToken', token!)
+      loginState.close();
+      window.location.reload();
+    })
       .catch((error) => {
         console.log('[ERROR VERIFYING CAPTCHA]', error);
         toast({
@@ -71,8 +76,8 @@ const AuthForm = () => {
         });
       });
 
-      setAnonUserCheck(false);
-    
+    setAnonUserCheck(false);
+    recaptchaRef.current?.reset();
   }
 
   const onSubmit = async (values:
@@ -153,7 +158,7 @@ const AuthForm = () => {
   const handleGoogleauth = async () => {
     setgoogleLoading(true);
     setTimeout(async () => {
-      const {data, error} = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
       });
 
@@ -183,29 +188,29 @@ const AuthForm = () => {
           />
         </div>
       </Button>
-      {logginIn && 
-      
+      {logginIn &&
+
         <>
-           {anonUserCheck && <ReCAPTCHA
+          {anonUserCheck &&
+            <ReCAPTCHA
               sitekey={`${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
               ref={recaptchaRef}
               onChange={handleCaptchaSubmission}
-              className="absolute z-50"
             />
-            }
+          }
 
-            <Button type="submit"
-              disabled={anonUserCheck}
-              className="w-64"
-              variant={'default'}
-              onClick={() => setAnonUserCheck(!anonUserCheck)}
-            >
-              {anonUserCheck ? <CircleLoader 
-                size={16} 
-                color={theme === "light" ? "white" : "black"}
-              /> : 'Login as Anonymous'}
-            </Button>
-          </>
+          <Button type="submit"
+            disabled={anonUserCheck}
+            className="w-64"
+            variant={'default'}
+            onClick={() => setAnonUserCheck(!anonUserCheck)}
+          >
+            {anonUserCheck ? <CircleLoader
+              size={16}
+              color={theme === "light" ? "white" : "black"}
+            /> : 'Login as Anonymous'}
+          </Button>
+        </>
 
       }
 
