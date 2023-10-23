@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from "./ui/button";
 import { useLoginModal } from "@/hooks/LoginModal";
 import { User } from "@supabase/supabase-js";
+import { useAnonUser } from "@/hooks/AnonUser";
 
 interface MobileMenuBarProps {
     user: User | null
@@ -12,6 +13,9 @@ interface MobileMenuBarProps {
 
 const MobileMenuBar = ({user}: MobileMenuBarProps) => {
     const loginState = useLoginModal();
+
+    // check if the user is anon
+    const anonUser = useAnonUser();
 
     return (
         <DropdownMenu>
@@ -34,7 +38,7 @@ const MobileMenuBar = ({user}: MobileMenuBarProps) => {
                     </Button>
                 </DropdownMenuItem>
 
-                {!user && <DropdownMenuItem
+                {!user && !anonUser.token && <DropdownMenuItem
                     className="w-full flex justify-center"
                 >
                     <Button

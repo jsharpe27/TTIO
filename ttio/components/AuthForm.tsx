@@ -9,7 +9,7 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { CircleLoader } from "react-spinners";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useToast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import { useLoginModal } from "@/hooks/LoginModal";
@@ -17,6 +17,9 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSignUpState } from "@/hooks/SignUpState";
 import { useTheme } from "next-themes";
 import axios from "axios";
+import ReCAPTCHA from "react-google-recaptcha"
+import { verifyCaptcha } from "@/lib/utils";
+import { useAnonUser } from "@/hooks/AnonUser";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -30,10 +33,13 @@ const formSchema = z.object({
 const AuthForm = () => {
   const [logginIn, setlogginIn] = useState(true);
   const [googleLoading, setgoogleLoading] = useState(false); // [TODO] use this to show loading state for google auth
+  const [anonUserCheck, setAnonUserCheck] = useState(false); 
   const loginState = useLoginModal();
   const signupState = useSignUpState();
+  const anonUser = useAnonUser();
   const supabase = createClientComponentClient();
   const { theme } = useTheme();
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -46,7 +52,19 @@ const AuthForm = () => {
   const { toast } = useToast();
   const router = useRouter();
 
+  console.log(anonUser);
+  
+
   const isLoading = form.formState.isSubmitting;
+
+  async function handleCaptchaSubmission(token: string | null) {
+    await verifyCaptcha(token)
+      .then(() => anonUser.makeAnon())
+      .catch(() => anonUser.unMakeAnon());
+    
+    anonUser.setToken(token || null);
+    loginState.close();
+  }
 
   const onSubmit = async (values:
     z.infer<typeof formSchema>
@@ -156,12 +174,26 @@ const AuthForm = () => {
           />
         </div>
       </Button>
-      {logginIn && <Button
-        className="flex items-center gap-x-2 w-64"
-        variant={'secondary'}
-      >
-        Login Anonymously
-      </Button>}
+      {logginIn && 
+      
+        <>
+           {anonUserCheck && <ReCAPTCHA
+              sitekey={`${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+              ref={recaptchaRef}
+              onChange={handleCaptchaSubmission}
+            />
+            }
+            
+            <Button type="submit"
+              className="w-64"
+              variant={'outline'}
+              onClick={() => setAnonUserCheck(!anonUserCheck)}
+            >
+              Login as Anonymous
+            </Button>
+          </>
+
+      }
 
       <Form {...form}>
         <form

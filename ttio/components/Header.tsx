@@ -9,6 +9,7 @@ import { ModeToggle } from "./ModeToggle";
 import MobileMenuBar from "./MobileMenuBar";
 import { useLoginModal } from "@/hooks/LoginModal";
 import { User } from "@supabase/supabase-js";
+import { useAnonUser } from "@/hooks/AnonUser";
 
 const font = Montserrat({ weight: "600", subsets: ["latin"] });
 const font2 = Saira_Stencil_One({ weight: "400", subsets: ["latin"] });
@@ -20,6 +21,9 @@ interface HeaderProps {
 const Header = ({user}: HeaderProps) => {
     
   const loginState = useLoginModal();
+
+  // check if the user is anon
+  const anonUser = useAnonUser();
   
 
   return (
@@ -68,7 +72,7 @@ const Header = ({user}: HeaderProps) => {
                 Post
             </Button>
 
-            {!user && <Button
+            {!user && !anonUser.token && <Button
                 variant={'outline'}
                 className="text-lg text-black rounded-3xl bg-white"
                 onClick={loginState.open}
