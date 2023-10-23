@@ -19,7 +19,6 @@ import { useTheme } from "next-themes";
 import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha"
 import { verifyCaptcha } from "@/lib/utils";
-import { useAnonUser } from "@/hooks/AnonUser";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -36,7 +35,6 @@ const AuthForm = () => {
   const [anonUserCheck, setAnonUserCheck] = useState(false); 
   const loginState = useLoginModal();
   const signupState = useSignUpState();
-  const anonUser = useAnonUser();
   const supabase = createClientComponentClient();
   const { theme } = useTheme();
   const recaptchaRef = useRef<ReCAPTCHA>(null);
@@ -52,18 +50,29 @@ const AuthForm = () => {
   const { toast } = useToast();
   const router = useRouter();
 
-  console.log(anonUser);
   
 
   const isLoading = form.formState.isSubmitting;
 
   async function handleCaptchaSubmission(token: string | null) {
+    setAnonUserCheck(true);
+
     await verifyCaptcha(token)
-      .then(() => anonUser.makeAnon())
-      .catch(() => anonUser.unMakeAnon());
+      .then(() => {
+        localStorage.setItem('anonToken', token!)
+        loginState.close();
+      })
+      .catch((error) => {
+        console.log('[ERROR VERIFYING CAPTCHA]', error);
+        toast({
+          variant: "destructive",
+          description: "Captcha verification failed, please try again.",
+          duration: 2000,
+        });
+      });
+
+      setAnonUserCheck(false);
     
-    anonUser.setToken(token || null);
-    loginState.close();
   }
 
   const onSubmit = async (values:
@@ -181,15 +190,20 @@ const AuthForm = () => {
               sitekey={`${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
               ref={recaptchaRef}
               onChange={handleCaptchaSubmission}
+              className="absolute z-50"
             />
             }
-            
+
             <Button type="submit"
+              disabled={anonUserCheck}
               className="w-64"
-              variant={'outline'}
+              variant={'default'}
               onClick={() => setAnonUserCheck(!anonUserCheck)}
             >
-              Login as Anonymous
+              {anonUserCheck ? <CircleLoader 
+                size={16} 
+                color={theme === "light" ? "white" : "black"}
+              /> : 'Login as Anonymous'}
             </Button>
           </>
 
