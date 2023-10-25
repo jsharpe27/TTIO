@@ -1,4 +1,5 @@
 "use client"
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Montserrat, Saira_Stencil_One } from 'next/font/google';
 
@@ -17,9 +18,10 @@ interface UserSideBarProps {
 }
 
 export default function LinksMenu() {
+    const [open, setOpen] = useState(false);
+
   return (
     <>
-     
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className="text-lg" variant='outline' >
@@ -44,9 +46,7 @@ export default function LinksMenu() {
           </DropdownMenuItem>
 
         </DropdownMenuContent>
-        
       </DropdownMenu>
-      
     </>
   )
 }
