@@ -16,20 +16,30 @@ model Post{
     body             String
     upvotes          Int
     downvotes        Int
+    post_type_id     Int
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model PostType {
+    id               Int @id @default(autoincrement())
+    name             String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
 model Profile{
-    userId           String    @id @default(cuid())
-    username         String?
+    user_id          String @id @default(uuid())
+    user_name        String?
     name             String?
     email            String
     website          String?
     bio              String?
     avatar           String?
-    isAdmin          Boolean @default(false)
+    is_admin          Boolean @default(false)
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }

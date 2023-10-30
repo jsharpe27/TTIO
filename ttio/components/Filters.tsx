@@ -1,16 +1,38 @@
+'use client'
+
 import { FunctionComponent } from "react";
 import { Button } from "./ui/button";
-import { ArrowDown, ArrowUp, ImageIcon, Twitter, VideoIcon } from "lucide-react";
+import { ArrowDown, ArrowUp, ImageIcon, Twitter, VideoIcon, BookCopyIcon } from "lucide-react";
 import { Separator } from "./ui/separator";
+import { useRouter, useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
+import qs from "query-string";
+import { PostType } from "@prisma/client";
 
 interface FilterPostsProps {
-    
+    filters: PostType[];
 }
- 
-const FilterPosts: FunctionComponent<FilterPostsProps> = () => {
+
+const FilterPosts: FunctionComponent<FilterPostsProps> = ({ filters }: FilterPostsProps) => {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
+    const query_filter = searchParams.get('filter_id');
+
+    const handleClick = (filterId: number | null) => {
+        const query = { filter_id: filterId };
+
+        const url = qs.stringifyUrl({
+            url: window.location.href,
+            query: query
+        }, { skipNull: true, skipEmptyString: true });
+
+        router.push(url);
+    }
+
     return (
         <div
-            className="w-full relative max-w-3xl flex flex-col gap-y-2 border-2 border-primary/50 py-4 pt-10 px-4 mt-4"
+            className="w-full relative max-w-3xl flex flex-col gap-y-2 border-2 border-primary/50 py-4 pt-10 px-4 mt-4 "
         >
             <div
                 className="text-center absolute -top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background text-primary px-4"
@@ -23,46 +45,37 @@ const FilterPosts: FunctionComponent<FilterPostsProps> = () => {
             >
 
                 <Button
-                    className="flex items-center gap-x-2 font-bold uppercase"
+                    className={cn(`flex items-center gap-x-2 font-bold uppercase`, !query_filter && 'bg-primary/20')}
                     variant={'outline'}
+                    onClick={
+                        () => handleClick(null)
+                    }
                 >
-                    <VideoIcon size={18} />
-                    Videos
+                    All
                 </Button>
 
-                <Button
-                    className="flex items-center gap-x-2 font-bold uppercase"
-                    variant={'outline'}
-                >
-                    <ImageIcon size={18} />
-                    Images
-                </Button>
+                {
+                    filters.map((filter) => (
+                        <Button
+                            key={filter.id}
+                            className={cn(`flex items-center gap-x-2 font-bold uppercase`, query_filter == filter.id.toString() && 'bg-primary/20')}
+                            variant={'outline'}
+                            onClick={
+                                () => handleClick(filter.id)
+                            }
+                        >
+                            {filter.name == 'videos' && <VideoIcon size={20} />}
+                            {filter.name == 'images' && <ImageIcon size={20} />}
+                            {filter.name == 'tweets' && <Twitter size={20} />}
+                            {filter.name == 'articles' && <BookCopyIcon size={20} />}
+                            {filter.name}
+                        </Button>
+                    ))
+                }
 
-                <Button
-                    className="flex items-center gap-x-2 font-bold uppercase"
-                    variant={'outline'}
-                >
-                    <Twitter size={18}/>
-                    Tweets
-                </Button>
-
-                <Button
-                    className="flex items-center gap-x-2 font-bold uppercase"
-                    variant={'outline'}
-                >
-                    
-                    Articles
-                </Button>
-
-                <Button
-                    className="font-bold uppercase"
-                    variant={'outline'}
-                >
-                    Reports
-                </Button>
             </div>
 
-            <Separator className="my-2"/>
+            <Separator className="my-2" />
             <div
                 className="w-full flex justify-center flex-wrap gap-x-4 gap-y-2"
             >
@@ -77,7 +90,7 @@ const FilterPosts: FunctionComponent<FilterPostsProps> = () => {
                     className="flex items-center gap-x-2 font-bold uppercase"
                     variant={'post'}
                 >
-                    
+
                     Ratings
 
                     <div
@@ -85,7 +98,7 @@ const FilterPosts: FunctionComponent<FilterPostsProps> = () => {
                     >
                         <ArrowUp
                             size={20}
-                            />
+                        />
                     </div>
 
                     <div
@@ -107,5 +120,5 @@ const FilterPosts: FunctionComponent<FilterPostsProps> = () => {
         </div>
     );
 }
- 
+
 export default FilterPosts;
