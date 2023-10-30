@@ -4,12 +4,14 @@ import {Montserrat} from 'next/font/google'
 import { cn } from '@/lib/utils'
 import SearchBar from '@/components/SearchBar'
 import FilterPosts from '@/components/Filters'
+import db from '@/lib/db'
 
 const font = Montserrat({ subsets: ['latin'] })
 
 
-const RootPage = () => {
+const RootPage = async () => {
   const supabase = createServerComponentClient({ cookies })
+  const filters = await db.postType.findMany()
   
   return (
     <div
@@ -26,7 +28,7 @@ const RootPage = () => {
       </p>
 
       <SearchBar/>
-      <FilterPosts/>
+      <FilterPosts filters={filters}/>
     </div>
   )
 }

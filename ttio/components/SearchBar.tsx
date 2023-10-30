@@ -1,27 +1,41 @@
 'use client'
 
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { SearchIcon } from "lucide-react";
 import { useDebounce } from "@/hooks/UseDebouncedValue";
+import qs from "query-string";  
+import { useRouter } from "next/navigation";
 
 interface SearchBarProps {   
 }
  
 const SearchBar: FunctionComponent<SearchBarProps> = () => {
     const [value, setvalue] = useState('')
+    const router = useRouter();
     const debouncedValue = useDebounce(value, 500);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setvalue(e.target.value)
     }
 
+    useEffect(() => {
+        const query = { search: debouncedValue };
+
+        const url = qs.stringifyUrl({
+            url: window.location.href,
+            query: query
+        }, { skipNull: true, skipEmptyString: true });
+
+        router.push(url);
+    }, [debouncedValue])
+
     // TODO: do the db search here using debouncedValue
     // the debounced value represents the value of the input after 500ms of no typing
 
     return (
         <div
-            className="w-full max-w-2xl px-6 my-4 relative"
+            className="w-full max-w-2xl px-6 my-4 sticky top-20 z-50 py-4"
         >
             <SearchIcon
                 size={24}

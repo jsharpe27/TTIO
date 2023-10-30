@@ -31,7 +31,7 @@ const Header =  ({ user }: HeaderProps) => {
     }, []);
     
     return (
-        <nav className="w-full flex items-center justify-between max-w-5xl mx-auto mt-4 px-4 md:px-2">
+        <nav className="w-full flex items-center justify-between max-w-5xl mx-auto pt-4 px-4 md:px-2 sticky top-0 z-50 bg-background border-b-2 backdrop-filter backdrop-blur-lg bg-opacity-20">
             <div
                 className="flex items-center gap-x-2"
             >
