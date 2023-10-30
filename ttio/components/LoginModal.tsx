@@ -4,9 +4,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog"
 import AuthForm from "./AuthForm"
 import { useLoginModal } from "@/hooks/LoginModal";
 import { Separator } from "./ui/separator";
-import { Button } from "./ui/button";
-import Image from "next/image";
-import Link from "next/link";
 
 const LoginModal = () => {
 
