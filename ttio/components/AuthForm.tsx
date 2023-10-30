@@ -11,7 +11,7 @@ import { CircleLoader } from "react-spinners";
 import Image from "next/image";
 import { useState, useRef } from "react";
 import { useToast } from "./ui/use-toast";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useLoginModal } from "@/hooks/LoginModal";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useSignUpState } from "@/hooks/SignUpState";
@@ -196,7 +196,7 @@ const AuthForm = () => {
               sitekey={`${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
               ref={recaptchaRef}
               onChange={handleCaptchaSubmission}
-            />
+            />  
           }
 
           <Button type="submit"
