@@ -41,32 +41,36 @@ export async function PUT(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}?error=Please login Again!`)
+  if (!user) return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}?error=Please login Again!`);
 
   const body = await request.json();
 
   try {
+    const { name, username, bio, website, avatar, email = user.email } = body;
+    console.log(avatar)
+    const updatedFields = {
+      ...(name && { name }),
+      ...(username && { username }),
+      ...(bio && { bio }),
+      ...(avatar && { avatar }),
+      ...(website && { website }),
+      email, 
+    };
+    console.log(updatedFields)
 
     const response = await db.profile.update({
       where: {
-        user_id: body.user_id,
+        user_id: user.id,
       },
-      data: {
-        email: body.email,
-        name: body.name,
-        username: body.username,
-        bio: body.bio,
-        website: body.website,
-        avatar: body.avatar,
-      },
+      data: updatedFields,
     });
 
     return NextResponse.json({
       success: true,
       data: response,
     });
-    
-  } catch (error) {
+
+  } catch (error: any) {
     console.log('THERE WAS AN ERROR UPDATING THE PROFILE', error);
     return NextResponse.json({
       success: false,
@@ -74,6 +78,7 @@ export async function PUT(request: Request) {
     });
   }
 }
+
 
 export async function POST(request: Request) {
   const body = await request.json();

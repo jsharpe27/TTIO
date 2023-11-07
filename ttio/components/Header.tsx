@@ -11,7 +11,7 @@ import MobileMenuBar from "./MobileMenuBar";
 import { useLoginModal } from "@/hooks/LoginModal";
 import { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
-
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 const font = Montserrat({ weight: "600", subsets: ["latin"] });
 const font2 = Saira_Stencil_One({ weight: "400", subsets: ["latin"] });
 
@@ -29,7 +29,7 @@ const Header =  ({ user }: HeaderProps) => {
         const anonToken = localStorage.getItem('anonToken');
         setAnonToken(anonToken!);
     }, []);
-    
+    const supabase = createClientComponentClient();
     return (
         <nav className="w-full flex items-center justify-between max-w-5xl mx-auto pt-4 px-4 md:px-2 sticky top-0 z-50 bg-background border-b-2 backdrop-filter backdrop-blur-lg bg-opacity-20">
             <div
@@ -88,7 +88,8 @@ const Header =  ({ user }: HeaderProps) => {
             </Button> : (
                 <Button
                 variant={'outline'}
-                className="text-lg text-white rounded-3xl bg-black"
+                className="text-lg text-primary rounded-3xl bg-secondary"
+                onClick={() => supabase.auth.signOut()}
             >
                 Logout
             </Button>)

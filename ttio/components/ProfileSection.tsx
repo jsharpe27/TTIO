@@ -13,6 +13,7 @@ import { useToast } from "./ui/use-toast";
 import { User } from "@supabase/supabase-js";
 import db from "@/lib/db";
 import { Profile } from "@prisma/client";
+import { EditAccount, EditProfile } from "./Edit";
 
 interface PProps {
     user: User
@@ -68,7 +69,9 @@ const ProfileSection = ({ user, profile }: PProps) => {
                     <CardDescription>{user.app_metadata.provider}</CardDescription>
                   </div>
                 </CardContent>
-                <CardFooter></CardFooter>
+                <CardFooter>
+                  <EditAccount user={user} profile={profile}/>
+                </CardFooter>
               </Card>
             </TabsContent>
             <TabsContent value="profile">
@@ -92,7 +95,9 @@ const ProfileSection = ({ user, profile }: PProps) => {
                     <CardDescription>{profile?.website}</CardDescription>
                   </div>
                 </CardContent>
-                <CardFooter></CardFooter>
+                <CardFooter>
+                  <EditProfile user={user} profile={profile}/>
+                </CardFooter>
               </Card>
             </TabsContent>
           </div>
