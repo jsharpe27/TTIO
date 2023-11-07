@@ -24,7 +24,7 @@ const RootLayout = async ({
   return (
     <div className="h-full w-full">
       <Header user={user} />
-      <main className="h-full">
+      <main className="h-full px-4">
         <AuthProvider accessToken={accessToken!}>
           {children}
         </AuthProvider>
