@@ -52,7 +52,7 @@ const MobileMenuBar = ({ user }: MobileMenuBarProps) => {
                     </DropdownMenuItem>
                 }
 
-                {!user && !anonToken && <DropdownMenuItem
+                {!user && !anonToken ? <DropdownMenuItem
                     className="w-full flex justify-center"
                 >
                     <Button
@@ -63,6 +63,17 @@ const MobileMenuBar = ({ user }: MobileMenuBarProps) => {
                     >
                         Login/Signup
                     </Button>
+                </DropdownMenuItem> : <DropdownMenuItem
+                    className="w-full flex justify-center"
+                >
+                    <Button
+                        size={'lg'}
+                        variant={'outline'}
+                        className="text-lg text-white rounded-3xl bg-black"
+                        >
+                        Logout
+                    </Button>
+                        
                 </DropdownMenuItem>}
             </DropdownMenuContent>
         </DropdownMenu>

@@ -11,7 +11,7 @@ import MobileMenuBar from "./MobileMenuBar";
 import { useLoginModal } from "@/hooks/LoginModal";
 import { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
-
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 const font = Montserrat({ weight: "600", subsets: ["latin"] });
 const font2 = Saira_Stencil_One({ weight: "400", subsets: ["latin"] });
 
@@ -29,7 +29,7 @@ const Header =  ({ user }: HeaderProps) => {
         const anonToken = localStorage.getItem('anonToken');
         setAnonToken(anonToken!);
     }, []);
-    
+    const supabase = createClientComponentClient();
     return (
         <nav className="w-full flex items-center justify-between max-w-5xl mx-auto pt-4 px-4 md:px-2 sticky top-0 z-50 bg-background border-b-2 backdrop-filter backdrop-blur-lg bg-opacity-20">
             <div
@@ -64,38 +64,46 @@ const Header =  ({ user }: HeaderProps) => {
                 </div>
             </div>
 
-            <div
-                className="items-center gap-x-4 transition-all duration-100 hidden md:flex"
+
+        <div
+            className="items-center gap-x-4 transition-all duration-100 hidden md:flex"
+        >
+
+            <Button
+                variant={'post'}
+                size={'lg'} 
+                className="rounded-3xl "
             >
+                Post
+            </Button>
 
+            {(user || anonToken) && <LinksMenu />}
+
+            {!user && !anonToken ? <Button
+                variant={'outline'}
+                className="text-lg text-black rounded-3xl bg-white"
+                onClick={loginState.open}
+            >
+                Login/Signup
+            </Button> : (
                 <Button
-                    variant={'post'}
-                    size={'lg'}
-                    className="rounded-3xl "
-                >
-                    Post
-                </Button>
+                variant={'outline'}
+                className="text-lg text-primary rounded-3xl bg-secondary"
+                onClick={() => supabase.auth.signOut()}
+            >
+                Logout
+            </Button>)
+            }
 
-                {(user || anonToken) && <LinksMenu />}
+            <ModeToggle />
+        </div>
 
-                {!user && !anonToken && <Button
-                    variant={'outline'}
-                    className="text-lg text-black rounded-3xl bg-white"
-                    onClick={loginState.open}
-                >
-                    Login/Signup
-                </Button>
-                }
-
-                <ModeToggle />
-            </div>
-
-            <div className="flex items-center gap-x-4 md:hidden">
-                <ModeToggle />
-                <MobileMenuBar user={user} />
-            </div>
-        </nav>
-    )
+        <div className="flex items-center gap-x-4 md:hidden">
+            <ModeToggle />
+            <MobileMenuBar user = {user} />
+        </div>
+    </nav>
+  )
 }
 
 export default Header
