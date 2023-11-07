@@ -32,7 +32,7 @@ model PostType {
 
 model Profile{
     user_id          String @id @default(uuid())
-    user_name        String?
+    username        String?
     name             String?
     email            String
     website          String?

@@ -9,11 +9,20 @@ const ProfilePage = async () => {
 
   const { user } = (await supabase.auth.getUser()).data;
   if (!user) return;
-  const profile = await db.profile.findUnique({
+  let profile;
+  profile = await db.profile.findUnique({
     where:{
-      userId: user?.id
+      user_id: user?.id
     }
   })
+  if(!profile) {
+    profile =  await db.profile.create({
+      data: {
+        user_id: user?.id,
+        email: user.email ? user.email : ""
+      },
+    });
+  }
   return (
     <>
       <ProfileSection user={user} profile={profile}/>

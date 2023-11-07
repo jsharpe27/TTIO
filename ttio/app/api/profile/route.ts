@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   try {
     const profile = await db.profile.findUnique({
       where:{
-        userId: id
+        user_id: id
       }
     })
 
@@ -49,7 +49,7 @@ export async function PUT(request: Request) {
 
     const response = await db.profile.update({
       where: {
-        userId: body.userId,
+        user_id: body.user_id,
       },
       data: {
         email: body.email,
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
   try {
     const response = await db.profile.create({
       data: {
-        userId: body.userId,
+        user_id: body.user_id,
         email: body.email,
       },
     });

@@ -104,7 +104,7 @@ const AuthForm = () => {
         console.log('[SIGNUP DATA]', data);
         await axios.post('/api/profile', {
           email: values.email,
-          userId: data?.user?.id,
+          user_id: data?.user?.id,
         });
 
       }
